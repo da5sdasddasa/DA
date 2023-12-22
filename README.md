@@ -1,3 +1,25 @@
+进行域适应的前提：源域有大量带标签的图像
+
+对应
+
+- 带标注的缺陷数据生成流程，如：
+
+  [Assigned MURA Defect Generation Based on Diffusion Model (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023W/VISION/papers/Liu_Assigned_MURA_Defect_Generation_Based_on_Diffusion_Model_CVPRW_2023_paper.pdf)（可尝试用于晶圆）
+
+  [[2309.00248\] DiffuGen: Adaptable Approach for Generating Labeled Image Datasets using Stable Diffusion Models](https://arxiv.org/abs/2309.00248)
+
+- 大规模的工业缺陷合成数据集，参考如GTA5、SYNTHIA等
+
+
+
+工业缺陷数据生成和域适应之间的结合
+
+结合的方式可以有以下几种：
+
+- 一种是在数据生成的过程中，引入域适应的思想，使得生成的缺陷样本能够适应不同的目标域，例如不同的产品、型号或缺陷类型。这样可以提高生成样本的质量和多样性，以及缺陷检测的泛化能力。
+- 另一种是在域适应的过程中，利用数据生成的技术，为源域或目标域增加更多的缺陷样本，从而缓解小样本问题。这样可以提高域适应的效果和稳定性，以及缺陷检测的准确性。
+- 还有一种是将数据生成和域适应作为一个统一的框架，同时进行缺陷样本的生成和适应。这样可以实现端到端的优化，以及缺陷检测的效率。（域适应的主流做法是对齐源域和目标域的分布，生成模型如VAE、GAN、扩散模型等的目标也是拟合待生成数据的真实分布，能否将两者结合）
+
 # Domain adaption
 
 ## GAN & Diffusion
