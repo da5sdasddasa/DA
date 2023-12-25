@@ -1,31 +1,20 @@
-进行域适应的前提：源域有大量带标签的图像
-
-对应
-
-- 带标注的缺陷数据生成流程，如：
-
-  [Assigned MURA Defect Generation Based on Diffusion Model (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023W/VISION/papers/Liu_Assigned_MURA_Defect_Generation_Based_on_Diffusion_Model_CVPRW_2023_paper.pdf)（可尝试用于晶圆）
-
-  [[2309.00248\] DiffuGen: Adaptable Approach for Generating Labeled Image Datasets using Stable Diffusion Models](https://arxiv.org/abs/2309.00248)
-
-- 大规模的工业缺陷合成数据集，参考如GTA5、SYNTHIA等
+# DA
 
 
-
-工业缺陷数据生成和域适应之间的结合
-
-结合的方式可以有以下几种：
-
-- 一种是在数据生成的过程中，引入域适应的思想，使得生成的缺陷样本能够适应不同的目标域，例如不同的产品、型号或缺陷类型。这样可以提高生成样本的质量和多样性，以及缺陷检测的泛化能力。
-- 另一种是在域适应的过程中，利用数据生成的技术，为源域或目标域增加更多的缺陷样本，从而缓解小样本问题。这样可以提高域适应的效果和稳定性，以及缺陷检测的准确性。
-- 还有一种是将数据生成和域适应作为一个统一的框架，同时进行缺陷样本的生成和适应。这样可以实现端到端的优化，以及缺陷检测的效率。（域适应的主流做法是对齐源域和目标域的分布，生成模型如VAE、GAN、扩散模型等的目标也是拟合待生成数据的真实分布，能否将两者结合）
-
----
-# Domain adaption
 
 ## GAN & Diffusion
 
 synthetic data
+
+- Diffusion
+
+### Phasic Content Fusing Diffusion Model with Directional Distribution Consistency for Few-Shot Model Adaption (ICCV 2023)
+
+[ICCV 2023 Open Access Repository (thecvf.com)](https://openaccess.thecvf.com/content/ICCV2023/html/Hu_Phasic_Content_Fusing_Diffusion_Model_with_Directional_Distribution_Consistency_for_ICCV_2023_paper.html)
+
+![image](https://raw.gitmirror.com/da5sdasddasa/image/main/202312251914674.jpeg)
+
+摘要：使用有限数量的样本训练生成模型是一项具有挑战性的任务。目前的方法主要依靠小样本模型自适应来训练网络。然而，在数据极其有限（少于 10 个）的情况下，生成网络往往会过度拟合并遭受内容降级的影响。为了解决这些问题，我们提出了一种新的融合了小样本扩散模型和定向分布一致性损失的阶段性内容，该模型针对扩散模型不同训练阶段的不同学习目标。具体来说，我们设计了一种具有阶段性内容融合的阶段性训练策略，以帮助我们的模型在t大时学习内容和风格信息，在t小时学习目标域的局部细节，从而改善对内容、风格和局部细节的捕获。此外，我们引入了一种新的方向分布一致性损失，与现有方法相比，它更高效、更稳定地保证了生成分布和源分布之间的一致性，从而防止了模型的过拟合。最后，提出了一种跨域结构引导策略，以增强域适应过程中结构的一致性。理论分析、定性和定量实验表明，与现有方法相比，该方法在小样本生成模型自适应任务中具有优越性。
 
 ### One-Shot Unsupervised Domain Adaptation With Personalized Diffusion Models (CVPR2023)
 
@@ -38,6 +27,18 @@ synthetic data
 ![image-20231220215503997](https://raw.gitmirror.com/da5sdasddasa/image/main/202312202155030.png)
 
 作者在两个标准的模拟到真实的UDA基准上进行了实验，分别是GTA → Cityscapes和SYNTHIA → Cityscapes，并与现有的OSUDA方法进行了比较。实验结果表明，该方法可以显著提高分割性能，并且可以与任何UDA方法兼容。
+
+### Domain-Guided Conditional Diffusion Model for Unsupervised Domain Adaptation (arXiv:2309.14360)
+
+[[2309.14360\] Domain-Guided Conditional Diffusion Model for Unsupervised Domain Adaptation (arxiv.org)](https://arxiv.org/abs/2309.14360)
+
+![image-20231225192235496](https://raw.gitmirror.com/da5sdasddasa/image/main/202312251922533.png)
+
+摘要：有限的可迁移性阻碍了深度学习模型在应用于新应用场景时的性能。最近，无监督域自适应（UDA）通过学习域不变特征在解决该问题方面取得了重大进展。然而，现有UDA方法的性能受到大域偏移和有限目标域数据的制约。为了缓解这些问题，我们提出了DomAin引导的条件扩散模型（DACDM）来为目标域生成高保真度和多样性样本。在所提出的DACDM中，通过引入类信息，可以控制生成样本的标签，并在DACDM中进一步引入域分类器来引导目标域生成样本。生成的样本有助于现有的UDA方法更容易地从源域转移到目标域，从而提高传输性能。在各种基准测试上的广泛实验表明，DACDM为现有UDA方法的性能带来了很大的改进。
+
+
+
+- GAN
 
 ### StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators (SIGGRAPH 2022)
 
@@ -97,7 +98,13 @@ DA + StyleGAN + CLIP 多模态
 
 ![d2f86325d6d0063eaebf88e0d7a90b83.png](https://raw.gitmirror.com/da5sdasddasa/image/main/202312201638906.png)
 
+### Differential Treatment for Stuff and Things: A Simple Unsupervised Domain Adaptation Method for Semantic Segmentation (CVPR 2020)
 
+[CVPR 2020 Open Access Repository (thecvf.com)](https://openaccess.thecvf.com/content_CVPR_2020/html/Wang_Differential_Treatment_for_Stuff_and_Things_A_Simple_Unsupervised_Domain_CVPR_2020_paper.html)
+
+![image-20231225192343948](https://raw.gitmirror.com/da5sdasddasa/image/main/202312251923985.png)
+
+摘要：在这项工作中，我们通过缓解源域（合成数据）和目标域（真实数据）之间的域转移来考虑语义分割的无监督域适应问题。最先进的方法证明，执行语义级对齐有助于解决领域转移问题。基于不同领域图像中通常具有相似外观，而事物（即对象实例）差异更大的观察，我们建议通过不同策略来改善事物区域和事物的语义层面对齐：1）对于事物类别，我们为每个类别生成特征表示，并进行从目标域到源域的对齐操作;2）对于事物类别，我们为每个单独的实例生成特征表示，并鼓励目标域中的实例与源域中最相似的实例保持一致。这样，事物类别中的个体差异也将被考虑以减轻过度对齐。除了我们提出的方法外，我们还进一步揭示了当前对抗性损失在最小化分布差异方面通常不稳定的原因，并表明我们的方法可以通过最小化源域和目标域之间最相似的东西和实例特征来帮助缓解这个问题。我们在GTA5 - Cityscapes和SYNTHIA - Cityscapes两个无监督域自适应任务中进行了广泛的实验，并实现了新的最先进的分割精度。
 
 ## Others
 
@@ -118,3 +125,30 @@ blender
 - **训练数据合成的目标**：通过最小化目标数据分布和合成数据分布之间的差异，以及最大化训练集的大小，来提高合成数据的效用。
 - **训练数据合成的方法**：利用稳定扩散模型作为深度生成模型，通过反向去噪过程来学习数据分布，并通过文本-视觉引导来模拟条件类别分布。
 - **训练数据合成的改进**：提出了三种改进策略，包括特征分布对齐、条件视觉引导和潜在先验初始化，以实现更好的分布匹配和合成质量。
+
+
+
+## 看法
+
+### 进行域适应的前提：源域有大量带标签的图像
+
+对应
+
+- 带标注的缺陷数据生成流程，如：
+
+  [Assigned MURA Defect Generation Based on Diffusion Model (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023W/VISION/papers/Liu_Assigned_MURA_Defect_Generation_Based_on_Diffusion_Model_CVPRW_2023_paper.pdf)（可尝试用于晶圆）
+
+  [[2309.00248\] DiffuGen: Adaptable Approach for Generating Labeled Image Datasets using Stable Diffusion Models](https://arxiv.org/abs/2309.00248)
+
+- 大规模的工业缺陷合成数据集，参考如GTA5、SYNTHIA等
+
+
+
+### 工业缺陷数据生成和域适应之间的结合
+
+结合的方式可以有以下几种：
+
+- 一种是在数据生成的过程中，引入域适应的思想，使得生成的缺陷样本能够适应不同的目标域，例如不同的产品、型号或缺陷类型。这样可以提高生成样本的质量和多样性，以及缺陷检测的泛化能力。
+- 另一种是在域适应的过程中，利用数据生成的技术，为源域或目标域增加更多的缺陷样本，从而缓解小样本问题。这样可以提高域适应的效果和稳定性，以及缺陷检测的准确性。
+- 还有一种是将数据生成和域适应作为一个统一的框架，同时进行缺陷样本的生成和适应。这样可以实现端到端的优化，以及缺陷检测的效率。（域适应的主流做法是对齐源域和目标域的分布，生成模型如VAE、GAN、扩散模型等的目标也是拟合待生成数据的真实分布，能否将两者结合）
+
