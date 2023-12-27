@@ -116,6 +116,30 @@ blender
 
 
 
+## Prompt & Domain Adaptation
+
+多模态 CLIP
+
+### PODA: Prompt-driven Zero-shot Domain Adaptation (ICCV 2023)
+
+[ICCV 2023 Open Access Repository --- ICCV 2023 开放获取存储库 (thecvf.com)](https://openaccess.thecvf.com/content/ICCV2023/html/Fahes_PODA_Prompt-driven_Zero-shot_Domain_Adaptation_ICCV_2023_paper.html)
+
+摘要：领域适应已经在计算机视觉中进行了广泛的研究，但仍然需要在训练时访问目标图像，这在一些不常见的情况下可能是棘手的。在本文中，我们提出了“提示驱动的零样本域适应”任务，即我们仅使用目标域的自然语言的一般描述（即提示）来适应在源域上训练的模型。首先，我们利用预训练的对比视觉语言模型（CLIP）来优化源特征的仿射转换，将它们引导到目标文本嵌入，同时保留其内容和语义。为了实现这一点，我们提出了提示驱动的实例规范化 （PIN）。其次，我们表明这些提示驱动的增强可用于对语义分割进行零样本域适应。实验表明，对于手头的下游任务，我们的方法在多个数据集上明显优于基于 CLIP 的样式迁移基线，甚至超过了一次性无监督域适应。在物体检测和图像分类方面也观察到类似的提升。该代码可在 https://github.com/astra-vision/PODA 上找到。
+
+### Domain Adaptation via Prompt Learning (IEEE Transactions on Neural Networks and Learning Systems)
+
+[IEEE Xplore: IEEE Transactions on Neural Networks and Learning Systems](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385)
+
+无监督域适应 （UDA） 旨在将从注释良好的源域学习的模型调整到目标域，其中仅给出未标记的样本。当前的 UDA 方法通过统计差异最小化或对抗训练来对齐源和目标特征空间来学习域不变特征。然而，这些约束可能导致语义特征结构的扭曲和类可区分性的丧失。在本文中，我们介绍了一种新颖的 UDA 提示学习范式，命名为通过提示学习进行领域适应 （DAPrompt）。与之前的工作相比，我们的方法学习了目标域的潜在标签分布，而不是对齐域。主要思想是将领域信息嵌入到提示中，提示是一种由自然语言生成的表示形式，然后用于执行分类。此域信息仅由来自同一域的图像共享，从而根据每个域动态调整分类器。通过采用这种范式，我们表明我们的模型不仅在几个跨领域基准测试中优于以前的方法，而且训练起来非常有效且易于实现。
+
+### AD-CLIP: Adapting Domains in Prompt Space Using CLIP (ICCV 2023)
+
+[ICCV 2023 Open Access Repository --- ICCV 2023 开放获取存储库 (thecvf.com)](https://openaccess.thecvf.com/content/ICCV2023W/OODCV/html/Singha_AD-CLIP_Adapting_Domains_in_Prompt_Space_Using_CLIP_ICCVW_2023_paper.html)
+
+尽管深度学习模型在监督学习任务上表现出令人印象深刻的性能，但当训练（源）和测试（目标）领域不同时，它们通常难以很好地泛化。无监督域自适应（DA）已成为解决该问题的常用解决方案。然而，当前的 DA 技术依赖于视觉骨干，这可能缺乏语义丰富性。尽管像CLIP这样的大规模视觉语言基础模型具有潜力，但它们对DA的有效性尚未得到充分探索。为了弥补这一差距，我们引入了 AD-CLIP，这是一种与领域无关的 CLIP 提示学习策略，旨在解决提示空间中的 DA 问题。我们利用 CLIP 的冻结视觉骨干来提取图像样式（域）和内容信息，并将其应用于学习提示令牌。我们的提示被设计为领域不变和类可泛化，通过同时对图像风格和内容特征进行提示学习。我们在源域中使用标准的监督对比学习，同时提出了一种熵最小化策略，以在给定目标域数据的情况下对齐嵌入空间中的域。我们还考虑了一种场景，即在测试期间只有目标域样本可用，而没有任何源域数据，并提出了一个跨域样式的映射网络来幻觉与域无关的令牌。我们在三个基准DA数据集上的广泛实验证明了与现有文献相比，AD-CLIP的有效性。
+
+
+
 ### REAL-FAKE: EFFECTIVE TRAINING DATA SYNTHESIS THROUGH DISTRIBUTION MATCHING
 
 用LoRA微调SD得到合成数据进行图像分类
@@ -136,9 +160,13 @@ blender
 
 - 带标注的缺陷数据生成流程，如：
 
-  [Assigned MURA Defect Generation Based on Diffusion Model (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023W/VISION/papers/Liu_Assigned_MURA_Defect_Generation_Based_on_Diffusion_Model_CVPRW_2023_paper.pdf)（可尝试用于晶圆）
+  [Assigned MURA Defect Generation Based on Diffusion Model (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023W/VISION/papers/Liu_Assigned_MURA_Defect_Generation_Based_on_Diffusion_Model_CVPRW_2023_paper.pdf)（可尝试用于晶圆）**CVPR2023W**
 
   [[2309.00248\] DiffuGen: Adaptable Approach for Generating Labeled Image Datasets using Stable Diffusion Models](https://arxiv.org/abs/2309.00248)
+
+  [[2104.06490\] DatasetGAN: Efficient Labeled Data Factory with Minimal Human Effort --- [2104.06490] DatasetGAN：以最少的人力工作量实现高效的标记数据工厂 (arxiv.org)](https://arxiv.org/abs/2104.06490)**CVPR'21, Oral** 
+
+  [[2112.03126\] Label-Efficient Semantic Segmentation with Diffusion Models --- [2112.03126] 使用扩散模型进行标签高效语义分割 (arxiv.org)](https://arxiv.org/abs/2112.03126)**ICLR'2022**
 
 - 大规模的工业缺陷合成数据集，参考如GTA5、SYNTHIA等
 
