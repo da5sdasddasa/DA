@@ -180,3 +180,136 @@ blender
 - 另一种是在域适应的过程中，利用数据生成的技术，为源域或目标域增加更多的缺陷样本，从而缓解小样本问题。这样可以提高域适应的效果和稳定性，以及缺陷检测的准确性。
 - 还有一种是将数据生成和域适应作为一个统一的框架，同时进行缺陷样本的生成和适应。这样可以实现端到端的优化，以及缺陷检测的效率。（域适应的主流做法是对齐源域和目标域的分布，生成模型如VAE、GAN、扩散模型等的目标也是拟合待生成数据的真实分布，能否将两者结合）
 
+
+
+结合多模态：
+
+2D与3D结合 nerf等
+
+文本、视频等？
+
+**文本数据：** 将相关文本信息（例如设备说明书、维护记录、报告）与图像数据结合，可以提供更多的背景信息，有助于更好地理解和分析缺陷。自然语言处理（NLP）技术可以用于处理和分析这些文本信息。
+
+标签生成、controlnet
+
+
+
+## 多模态数据生成
+
+### ImageBind: One Embedding Space To Bind Them All (CVPR 2023)
+
+[ImageBind: One Embedding Space To Bind Them All (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023/papers/Girdhar_ImageBind_One_Embedding_Space_To_Bind_Them_All_CVPR_2023_paper.pdf)
+
+[IMAGEBIND：统一六种模态的嵌入空间 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/629386507)
+
+![v2-68a0f8682587eaf3f8eaab43dc502f7c_b](https://raw.gitmirror.com/da5sdasddasa/image/main/202401031915657.gif)
+
+将文本、深度、IMU、音频和热图通过图像绑定在一起，对齐多种模态，可以重点关注的点：
+
+无需重新训练，我们可以 "升级 "现有的使用CLIP嵌入的视觉模型，以使用来自其他模态的IMAGEBIND嵌入，如音频。将基于文本的检测器升级为基于音频的检测器。我们使用一个预训练好的基于文本的检测模型，Detic [86]，并简单地用IMAGEBIND的音频嵌入替换其基于CLIP的'类'（文本）嵌入。无需训练，这就创造了一个基于音频的检测器，可以根据音频提示来检测和分割目标。如图5所示，我们可以用狗的吠叫声来提示检测器，以定位一只狗。
+
+![image-20240103192249401](https://raw.gitmirror.com/da5sdasddasa/image/main/202401032022519.png)
+
+view: 直接用音频嵌入替换文本嵌入即可将基于文本的检测器升级为基于音频的检测器，能否将这种思路用于多模态数据生成
+
+### Collaborative Diffusion for Multi-Modal Face Generation and Editing (CVPR 2023)
+
+[Collaborative Diffusion for Multi-Modal Face Generation and Editing (thecvf.com)](https://openaccess.thecvf.com/content/CVPR2023/papers/Huang_Collaborative_Diffusion_for_Multi-Modal_Face_Generation_and_Editing_CVPR_2023_paper.pdf)
+
+[CVPR 2023 | 多个扩散模型相互合作，新方法实现多模态人脸生成与编辑 (qq.com)](https://mp.weixin.qq.com/s/UdGFbp6xPRaMGy4L2uOrJw)
+
+
+
+CVPR 2023 的 Collaborative Diffusion 提供了一种简单有效的方法来实现不同扩散模型之间的合作。
+
+![image-20240103193052247](https://raw.gitmirror.com/da5sdasddasa/image/main/202401031930320.png)
+
+不同种类的扩散模型性能各异 —— text-to-image 模型可以根据文字生成图片，mask-to-image 模型可以从分割图生成图片，除此之外还有更多种类的扩散模型，例如生成视频、3D、motion 等等。
+
+![图片](https://raw.gitmirror.com/da5sdasddasa/image/main/202401032022089.jpeg)
+
+假如有一种方法让这些 pre-trained 的扩散模型合作起来，发挥各自的专长，那么我们就可以得到一个多功能的生成框架。比如当 text-to-image 模型与 mask-to-image 模型合作时，我们就可以同时接受 text 和 mask 输入，生成与 text 和 mask 一致的图片了。CVPR 2023 的 Collaborative Diffusion 提供了一种简单有效的方法来实现不同扩散模型之间的合作。
+
+view: 用否用类似的方式将不同输入输出模态的生成模型协调结合起来以实现多模态的数据生成
+
+
+
+## 可控图像生成
+
+### CVPR 2023 | FreestyleNet：自由式布局到图像生成
+
+[openaccess.thecvf.com/content/CVPR2023/papers/Xue_Freestyle_Layout-to-Image_Synthesis_CVPR_2023_paper.pdf](https://openaccess.thecvf.com/content/CVPR2023/papers/Xue_Freestyle_Layout-to-Image_Synthesis_CVPR_2023_paper.pdf)
+
+[CVPR 2023 | FreestyleNet：自由式布局到图像生成 (qq.com)](https://mp.weixin.qq.com/s/8Xnm4GrrurTln06sc_nNjA)
+
+本文基于预训练的文生图大模型Stable Diffusion 构建了FreestyleNet。Stable Diffusion能够为我们提供丰富的语义，但是其只支持文本作为输入，如何将这些语义填入指定的布局是一个巨大的挑战。为此，本文引入了修正交叉注意力（Rectified Cross-Attention，RCA）层，并将其插入到Stable Diffusion的U-Net当中。通过限制文本token只在特定的区域与图像token产生交互，RCA实现了将语义自由放置在指定布局上的功能。实验表明，FreestyleNet能够结合文本和布局生成逼真的结果，进一步增强了图像生成的可控性。
+
+![image-20240103200018066](https://raw.gitmirror.com/da5sdasddasa/image/main/202401032022147.png)
+
+
+
+***
+
+
+
+如何在图像生成的同时得到像素级标签即可控生成已经有一些方法 如controlnet freestylenet等 问题：由于扩散过程的随机性，生成的标签仍然不是很可靠，将这种数据用于训练会干扰模型的性能，如何实现标签可靠的数据生成。
+
+### NeurIPS 2023｜FreeMask: 用密集标注的合成图像提升分割模型性能
+
+[[2310.15160\] FreeMask: Synthetic Images with Dense Annotations Make Stronger Segmentation Models --- [2310.15160] FreeMask：具有密集注释的合成图像可以打造更强的分割模型 (arxiv.org)](https://arxiv.org/abs/2310.15160)
+
+[NeurIPS 2023｜FreeMask: 用密集标注的合成图像提升分割模型性能 (qq.com)](https://mp.weixin.qq.com/s/xLiLOjFfFkLA4Davl3u-yQ)
+
+合成数据的策略及如何利用合成数据：
+
+![image-20240103203436537](https://raw.gitmirror.com/da5sdasddasa/image/main/202401032037109.png)
+
+
+
+![image-20240103203740297](https://raw.gitmirror.com/da5sdasddasa/image/main/202401032039653.png)
+
+![image-20240103193952289](https://raw.gitmirror.com/da5sdasddasa/image/main/202401032022169.png)
+
+
+
+view：文章中的方法用ADE20K和COCO数据集的mask生成一个更大的ADE20K-Synthetic数据集（包含ADE20K的20倍的训练图像）和COCO-Synthetic数据集（包含COCO-Stuff-164K的6倍的训练图像）然后将真实图像与合成图像混合训练，验证合成图像对分割模型性能的提升。需要关注合成图像的标签质量和合成图像的复杂程度(困难样本)
+
+
+
+
+
+## 合成数据
+
+如果合成数据集和真实数据集之间的差异很大，那么使用域适应的方法可以提高模型在真实数据集上的性能。如果合成数据集和真实数据集之间的差异很小，那么使用域适应的方法可能没有太大的必要或效果。一般来说，如果生成方法能够保证合成数据和真实数据的分布一致性，那么就不需要进行域适应；如果生成方法导致合成数据和真实数据的分布存在较大差异，那么就需要进行域适应，以提高模型的泛化能力。
+
+目前绝大多数的数据生成论文在用于分类、检测等视觉任务上时都没有涉及域适应，原因可能在于数据生成在于拟合真实数据的分布，如果使用域适应方法说明该数据生成方法学习的分布与真实分布差异大，效果不好。
+
+
+
+目前的数据生成方法已经十分逼真，合成数据可直接用于视觉任务的精度提升
+
+[Explore the Power of Synthetic Data on Few-shot Object Detection](https://openaccess.thecvf.com/content/CVPR2023W/GCV/html/Lin_Explore_the_Power_of_Synthetic_Data_on_Few-Shot_Object_Detection_CVPRW_2023_paper.html)CVPRW2023:探索合成数据在少样本目标检测中的作用
+
+随着生成模型的发展，文本到图像的生成已经取得了很大的进展。例如，DALLE、Imagen和Stable Diffusion可以通过简单地使用输入的文本描述生成高质量的图像。这些生成器可以产生不同的结果，这意味着工业应用的前景更加光明，例如解决许多现有的少数或长尾问题。这鼓励我们探索文本到图像生成器的合成数据对FSOD任务的影响。我们的研究是在开源的稳定扩散上进行的。通过使用生成的图像，我们定义了一个新的(K + G)-shot设置，用于使用合成数据进行少镜头学习的问题，由K个真实的新实例和G个生成的新实例组成。必须回答两个关键问题:(1)如何将合成数据用于FSOD?(2)如何从大规模合成数据集中找到具有代表性的样本?
+
+[Is synthetic data from generative models ready for image recognition?](https://arxiv.org/abs/2210.07574)用合成数据做训练，效果比真实数据还好丨ICLR 2023 
+
+使用高质量AI合成图片，来提升**图像分类模型**的性能
+
+[Synthetic Data from Diffusion Models Improves ImageNet Classification](https://arxiv.org/pdf/2304.08466.pdf)使用扩散模型生成合成图像，将真实数据集进行了扩充，从而提高了在ImageNet分类任务上的效果。这说明了使用图像生成方法可以增加数据的多样性，提高模型的泛化能力。但是，这并不意味着一定要使用域适应的方法，因为扩散模型生成的图像和真实图像之间的差异并不是很大，而且扩散模型本身就是在真实图像上训练的。
+
+
+
+
+
+在数据阶段，域适应更适合以下场景：
+
+blender等物理仿真数据、图像合成、光照背景尺度等变化引起的Domain Shift
+
+
+
+[Making Images Real Again: A Comprehensive Survey on Deep Image Composition]([2106.14490.pdf (arxiv.org)](https://arxiv.org/pdf/2106.14490.pdf))使用深度学习方法进行图像合成，即将一张图片的前景剪切下来，粘贴到另一张图片的背景上，得到一张新的图片。但是由于前景和背景之间可能存在不一致性，例如颜色、光照、透视等，所以需要使用域适应的方法来消除这些不一致性，让合成图看起来更加真实自然。
+
+[Industrial Anomaly Detection with Domain Shift: A Real-world Dataset and Masked Multi-scale Reconstruction](https://arxiv.org/abs/2304.02216)
+
+工业异常检测 (IAD) 对于自动化工业质量检测至关重要。数据集的多样性是开发综合IAD算法的基础。现有的IAD数据集关注数据类别的多样性，忽视了同一数据类别内域的多样性。在本文中，为了弥补这一差距，我们提出了航空发动机叶片异常检测（AeBAD）数据集，该数据集由两个子数据集组成：单叶片数据集和叶片视频异常检测数据集。与现有数据集相比，AeBAD具有以下两个特点：1.）目标样本未对齐且尺度不同。 2.) 测试集和训练集中正态样本的分布存在域偏移，其中域偏移主要是由光照和视图的变化引起的。基于该数据集，我们观察到，当测试集中正常样本的域发生变化时，当前最先进的 (SOTA) IAD 方法表现出局限性。为了解决这个问题，我们提出了一种称为掩模多尺度重建（MMR）的新方法，它增强了模型通过掩模重建任务推断正常样本中斑块之间因果关系的能力。与 AeBAD 数据集上的 SOTA 方法相比，MMR 实现了卓越的性能。此外，MMR 通过 SOTA 方法实现了具有竞争力的性能，以检测 MVTec AD 数据集上不同类型的异常。
