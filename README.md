@@ -313,3 +313,45 @@ blender等物理仿真数据、图像合成、光照背景尺度等变化引起�
 [Industrial Anomaly Detection with Domain Shift: A Real-world Dataset and Masked Multi-scale Reconstruction](https://arxiv.org/abs/2304.02216)
 
 工业异常检测 (IAD) 对于自动化工业质量检测至关重要。数据集的多样性是开发综合IAD算法的基础。现有的IAD数据集关注数据类别的多样性，忽视了同一数据类别内域的多样性。在本文中，为了弥补这一差距，我们提出了航空发动机叶片异常检测（AeBAD）数据集，该数据集由两个子数据集组成：单叶片数据集和叶片视频异常检测数据集。与现有数据集相比，AeBAD具有以下两个特点：1.）目标样本未对齐且尺度不同。 2.) 测试集和训练集中正态样本的分布存在域偏移，其中域偏移主要是由光照和视图的变化引起的。基于该数据集，我们观察到，当测试集中正常样本的域发生变化时，当前最先进的 (SOTA) IAD 方法表现出局限性。为了解决这个问题，我们提出了一种称为掩模多尺度重建（MMR）的新方法，它增强了模型通过掩模重建任务推断正常样本中斑块之间因果关系的能力。与 AeBAD 数据集上的 SOTA 方法相比，MMR 实现了卓越的性能。此外，MMR 通过 SOTA 方法实现了具有竞争力的性能，以检测 MVTec AD 数据集上不同类型的异常。
+
+
+
+## mask-image pair
+
+
+
+- 参考无监督分割方法，没有真实标签如何对模型分割结果进行评估
+
+- 参考SAM Mask Decoder的iou_score，网络打分
+- VLM:使用GPT4V等视觉语言模型进行评估
+- mask-image pair 评估指标？
+
+
+
+
+
+## DM
+
+[视觉扩散模型：调查| 视觉扩散模型IEEE 期刊和杂志 | IEEE探索 --- Diffusion Models in Vision: A Survey | IEEE Journals & Magazine | IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/10081412)
+
+Survey
+
+[扩散模型在图像合成方面击败了 GAN --- Diffusion Models Beat GANs on Image Synthesis (neurips.cc)](https://proceedings.neurips.cc/paper_files/paper/2021/hash/49ad23d1ec9fa4bd8d77d02681df5cfa-Abstract.html)
+
+我们表明，扩散模型可以实现优于当前最先进的生成模型的图像样本质量。我们通过一系列消融寻找更好的架构，在无条件图像合成上实现了这一目标。对于条件图像合成，我们通过分类器指导进一步提高样本质量：一种简单、计算高效的方法，使用分类器的梯度来权衡多样性和保真度。我们在 ImageNet 128 × 128 上实现了 2.97，在 ImageNet 256 × 256 上实现了 4.59，在 ImageNet 512 上实现了 7.72 × 512，即使每个样本的前向传递次数只有 25 次，我们仍能匹配 BigGAN 深度，同时保持更好的分布覆盖范围。最后，我们发现分类器指导与上采样扩散模型结合得很好，进一步将 ImageNet 256 × 256 上的 FID 提高到 3.94，在 ImageNet 512 上将 FID 提高到 3.85 
+
+[扩散模型：条件生成classifier guidance，classifier-free guidance (qq.com)](https://mp.weixin.qq.com/s/S46QsAZi9J2LQ_qfx2pu3A)
+
+![image-20240115091813528](https://raw.gitmirror.com/da5sdasddasa/image/main/202401150918577.png)
+
+[[2211.16152\] 小波扩散模型是快速且可扩展的图像生成器 --- [2211.16152] Wavelet Diffusion Models are fast and scalable Image Generators (arxiv.org)](https://arxiv.org/abs/2211.16152)
+
+扩散模型正在成为高保真图像生成的强大解决方案，在许多情况下其质量超过了 GAN。然而，它们缓慢的训练和推理速度是一个巨大的瓶颈，阻碍了它们在实时应用中的使用。最近的 DiffusionGAN 方法通过将采样步骤数从数千减少到几个，显着减少了模型的运行时间，但其速度仍然大大落后于 GAN 同行。本文旨在通过提出一种新颖的基于小波的扩散方案来缩小速度差距。我们通过小波分解从图像和特征级别提取低频和高频分量，并自适应地处理这些分量以实现更快的处理，同时保持良好的生成质量。此外，我们建议使用重建项，这有效地提高了模型训练的收敛性。 CelebA-HQ、CIFAR-10、LSUN-Church 和 STL-10 数据集上的实验结果证明我们的解决方案是提供实时高保真扩散模型的基石。
+
+![image-20240115091128545](https://raw.gitmirror.com/da5sdasddasa/image/main/202401150911267.png)
+
+[[2312.03606\] DiffusionSat：卫星图像的生成基础模型 --- [2312.03606] DiffusionSat: A Generative Foundation Model for Satellite Imagery (arxiv.org)](https://arxiv.org/abs/2312.03606)
+
+扩散模型在图像、语音和视频等多种模式上取得了最先进的结果。然而，现有模型并未专门支持遥感数据，而遥感数据广泛应用于环境监测和作物产量预测等重要应用。卫星图像与自然图像显着不同——它们可以是多光谱的、随时间不规则采样的——而现有的基于网络图像训练的扩散模型不支持它们。此外，遥感数据本质上是时空数据，需要基于字幕或图像的传统方法不支持的条件生成任务。在本文中，我们提出了 DiffusionSat，这是迄今为止在公开的大型高分辨率遥感数据集上训练的最大的生成基础模型。由于卫星图像很少有基于文本的字幕，因此我们将地理位置等相关元数据合并为条件信息。我们的方法产生真实的样本，可用于解决多种生成任务，包括时间生成、给定多光谱输入的超分辨率和修复。我们的方法优于以前最先进的卫星图像生成方法，是第一个用于卫星图像的大规模 generative 基础模型。
+
+![image-20240115091208835](https://raw.gitmirror.com/da5sdasddasa/image/main/202401150912914.png)
